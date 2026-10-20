@@ -240,3 +240,4 @@ img.zoomable{cursor:zoom-in}
 .news{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;gap:16px 32px;flex-wrap:wrap}
 .news h2{font-size:clamp(20px,2.4vw,26px)}
 .news p{color:var(--text2)}
+.cf-wait{background:var(--bg2);color:var(--text2)}

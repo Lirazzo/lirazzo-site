@@ -77,7 +77,10 @@
         page: location.pathname
       };
       send.disabled = true; send.textContent = "Envoi…";
-      status.textContent = ""; status.className = "cf-status";
+      status.textContent = "Envoi en cours…"; status.className = "cf-status cf-wait";
+      var slow = setTimeout(function () {
+        status.textContent = "L'envoi prend un peu plus de temps que prévu, merci de patienter sans fermer la fenêtre…";
+      }, 6000);
       fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -99,7 +102,7 @@
           status.innerHTML = "L'envoi n'a pas abouti. Vous pouvez m'écrire directement à <a href=\"mailto:contact@lirazzo.fr\">contact@lirazzo.fr</a>.";
           status.className = "cf-status cf-err";
         })
-        .then(function () { send.disabled = false; send.textContent = "Envoyer"; });
+        .then(function () { clearTimeout(slow); send.disabled = false; send.textContent = "Envoyer"; });
     });
   }
 
