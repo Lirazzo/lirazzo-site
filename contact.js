@@ -90,7 +90,12 @@
             status.className = "cf-status cf-ok";
           } else { throw new Error(res.j.message || "refus"); }
         })
-        .catch(function () {
+        .catch(function (err) {
+          if (/activ/i.test(String(err && err.message))) {
+            status.textContent = "Formulaire en cours d'activation : votre message n'a pas encore pu être transmis. Merci de réessayer plus tard ou d'écrire à contact@lirazzo.fr.";
+            status.className = "cf-status cf-err";
+            return;
+          }
           status.innerHTML = "L'envoi n'a pas abouti. Vous pouvez m'écrire directement à <a href=\"mailto:contact@lirazzo.fr\">contact@lirazzo.fr</a>.";
           status.className = "cf-status cf-err";
         })
