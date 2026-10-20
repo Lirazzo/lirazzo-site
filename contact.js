@@ -1,8 +1,9 @@
 /* Formulaire de contact Lirazzo : fenêtre ouverte depuis les liens « contact »,
-   envoi par FormSubmit vers contact@lirazzo.fr. Sans JavaScript, les liens
+   envoi par Web3Forms vers contact@lirazzo.fr. Sans JavaScript, les liens
    gardent leur comportement normal (ancre #contact ou lien mailto). */
 (function () {
-  var ENDPOINT = "https://formsubmit.co/ajax/contact@lirazzo.fr";
+  var ENDPOINT = "https://api.web3forms.com/submit";
+  var KEY = "6d70cd45-e193-46d0-981d-bbbfd96df456"; /* clé publique Web3Forms, faite pour être dans la page */
 
   var html =
     '<dialog class="cf" id="cf" aria-labelledby="cf-title">' +
@@ -18,7 +19,7 @@
     '<label>Ville<input name="ville" autocomplete="address-level2"></label>' +
     '</div>' +
     '<label>Votre message *<textarea name="message" rows="6" required placeholder="La tâche qui vous fait perdre du temps, le nombre de personnes concernées, les outils actuels…"></textarea></label>' +
-    '<input type="text" name="_honey" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+    '<input type="text" name="botcheck" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">' +
     '<p class="cf-legal">Vos informations servent uniquement à répondre à votre demande. Voir la <a href="confidentialite.html">politique de confidentialité</a>.</p>' +
     '<p class="cf-status" role="status" aria-live="polite"></p>' +
     '<div class="cf-actions"><button type="button" class="btn btn-ghost cf-cancel">Annuler</button>' +
@@ -63,11 +64,11 @@
         f[missing[0]].focus();
         return;
       }
-      if (f._honey.value) return;
+      if (f.botcheck.value) return;
       var data = {
-        _subject: "Lirazzo · nouveau message de " + f.nom.value.trim(),
-        _template: "table",
-        _captcha: "false",
+        access_key: KEY,
+        subject: "Lirazzo · nouveau message de " + f.nom.value.trim(),
+        from_name: "Site lirazzo.fr",
         nom: f.nom.value.trim(),
         entreprise: f.entreprise.value.trim(),
         email: f.email.value.trim(),
@@ -76,6 +77,7 @@
         message: f.message.value.trim(),
         page: location.pathname
       };
+
       send.disabled = true; send.textContent = "Envoi…";
       status.textContent = "Envoi en cours…"; status.className = "cf-status cf-wait";
       var slow = setTimeout(function () {
@@ -87,7 +89,7 @@
         body: JSON.stringify(data)
       }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
         .then(function (res) {
-          if (res.ok && String(res.j.success) === "true") {
+          if (res.ok && (res.j.success === true || String(res.j.success) === "true")) {
             form.reset();
             status.textContent = "Merci, votre message est bien envoyé. Je reviens vers vous rapidement.";
             status.className = "cf-status cf-ok";
