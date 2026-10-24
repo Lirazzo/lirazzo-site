@@ -14,7 +14,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--navy);font:400 17px/1.6 var(--body)}
-img{max-width:100%}
+img{max-width:100%;height:auto}
 a{color:var(--navy)}a:hover{color:var(--accent-dark)}
 :focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 h1,h2,h3{font-family:var(--display);margin:0}
